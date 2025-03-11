@@ -45,7 +45,7 @@ If Ghostscript is installed correctly, you should see the version information.
 1. Place the PDFs you want to compress and/or merge into a folder.
 2. Run the Python script by specifying the input and output directories as follows:
    ```sh
-   python your_script.py
+   python PDF-Optimizer.py
    ```
 
 ## License
