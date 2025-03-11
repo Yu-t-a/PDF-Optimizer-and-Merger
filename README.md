@@ -13,12 +13,17 @@ This project provides a tool for compressing PDF files by reducing image quality
 Before running the project, make sure to install the following Python dependencies:
 
 1. **PyPDF2**: A library used for merging PDFs.
-pip install PyPDF2
+   ```sh
+   pip install PyPDF2
+   ```
 2. **pikepdf**: A library for manipulating PDF files (including compressing and resizing images).
-pip install pikepdf
+   ```sh
+   pip install pikepdf
+   ```
 3. **Pillow**: A Python Imaging Library (PIL) fork to handle images within PDFs.
-pip install Pillow
-
+   ```sh
+   pip install Pillow
+   ```
 
 ### Ghostscript
 This project uses **Ghostscript** to compress images within PDF files. You need to download and install it on your system.
@@ -29,7 +34,9 @@ This project uses **Ghostscript** to compress images within PDF files. You need 
 ### Verify Ghostscript Installation
 After installing Ghostscript, verify that it is correctly installed by running the following command in the Command Prompt:
 
+```sh
 gswin64c --version
+```
 
 If Ghostscript is installed correctly, you should see the version information.
 
@@ -37,9 +44,10 @@ If Ghostscript is installed correctly, you should see the version information.
 
 1. Place the PDFs you want to compress and/or merge into a folder.
 2. Run the Python script by specifying the input and output directories as follows:
-   ```python
+   ```sh
    python your_script.py
+   ```
 
-License
+## License
 This project is licensed under the MIT License.
 
