@@ -202,25 +202,35 @@ def find_and_compress_pdfs(input_directory, output_directory, dpi=150, image_qua
 
 def merge_pdfs(input_directory, output_directory):
     pdf_merger = PdfMerger()
+    pdf_files = []
+    skipped_files = []
     
-    # หามาไฟล์ PDF ทั้งหมดใน directory และคัดกรองเฉพาะไฟล์ .pdf
-    pdf_files = [file_name for file_name in os.listdir(input_directory) if file_name.endswith(".pdf")]
+    # คัดกรองไฟล์ที่มีชื่อตัวเลข และเก็บไฟล์ที่ไม่ใช่ตัวเลข
+    for file_name in os.listdir(input_directory):
+        if file_name.endswith(".pdf"):
+            try:
+                # แปลงชื่อไฟล์เป็นตัวเลขเพื่อตรวจสอบ
+                file_number = int(file_name.split(".")[0])
+                pdf_files.append((file_number, file_name))
+            except ValueError:
+                skipped_files.append(file_name)
     
-    # เรียงลำดับไฟล์ PDF ตามค่าตัวเลขของชื่อไฟล์
-    pdf_files = sorted(pdf_files, key=lambda x: int(x.split(".")[0]))  
-
-    # แสดงลำดับไฟล์ก่อนรวม
+    # เรียงลำดับไฟล์ตามค่าตัวเลข
+    pdf_files.sort()
+    pdf_files = [file_name for _, file_name in pdf_files]
+    
+    # แสดงลำดับไฟล์ที่ถูกรวม
     print("ลำดับไฟล์ PDF ก่อนรวม:")
     for idx, file_name in enumerate(pdf_files, start=1):
         print(f"{idx}. {file_name}")
-
+    
     # รวมไฟล์ PDF ตามลำดับที่ถูกต้อง
     for file_name in pdf_files:
         file_path = os.path.join(input_directory, file_name)
         pdf_merger.append(file_path)
     
     # สร้างชื่อไฟล์ output พร้อมวันที่
-    date_str = datetime.now().strftime("%Y-%m-%d")  # วันที่ในรูปแบบปี-เดือน-วัน
+    date_str = datetime.now().strftime("%Y-%m-%d")
     output_pdf = os.path.join(output_directory, f"Ex_{date_str}_merged.pdf")
     
     # บันทึกไฟล์ PDF ที่รวม
@@ -229,17 +239,24 @@ def merge_pdfs(input_directory, output_directory):
     
     print(f"\nไฟล์ PDF ถูกรวมเรียบร้อยแล้วที่ {output_pdf}")
     
+    # แสดงไฟล์ที่ไม่ถูกนำมารวม
+    if skipped_files:
+        print("\nไฟล์ที่ไม่ถูกนำมารวม:")
+        for file_name in skipped_files:
+            print(f"- {file_name}")
+    
     return output_pdf
+
     
 # ตัวอย่างการใช้งาน
 if __name__ == "__main__":
-    input_directory = "D:/python/NE/B5"
-    output_directory = "D:/python/NE/A5"
+    input_directory = "[path input]"
+    output_directory = "[path output]"
     
     # ลดความละเอียดของรูปภาพเป็น 150 dpi และตั้งค่าคุณภาพ JPEG เป็น 85%
     results = find_and_compress_pdfs(input_directory, output_directory, dpi=30, image_quality=5)
     
-    input_directory = "D:/python/NE/A5"
+    input_directory = "[path input]"
     merge_pdfs(input_directory, output_directory)
     
     print("\nการทำงานเสร็จสิ้น!")
