@@ -203,10 +203,18 @@ def find_and_compress_pdfs(input_directory, output_directory, dpi=150, image_qua
 def merge_pdfs(input_directory, output_directory):
     pdf_merger = PdfMerger()
     
-    # หามาไฟล์ PDF ทั้งหมดใน directory และเรียงตามชื่อ
+    # หามาไฟล์ PDF ทั้งหมดใน directory และคัดกรองเฉพาะไฟล์ .pdf
     pdf_files = [file_name for file_name in os.listdir(input_directory) if file_name.endswith(".pdf")]
-    pdf_files.sort()  # เรียงไฟล์ตามชื่อ
     
+    # เรียงลำดับไฟล์ PDF ตามค่าตัวเลขของชื่อไฟล์
+    pdf_files = sorted(pdf_files, key=lambda x: int(x.split(".")[0]))  
+
+    # แสดงลำดับไฟล์ก่อนรวม
+    print("ลำดับไฟล์ PDF ก่อนรวม:")
+    for idx, file_name in enumerate(pdf_files, start=1):
+        print(f"{idx}. {file_name}")
+
+    # รวมไฟล์ PDF ตามลำดับที่ถูกต้อง
     for file_name in pdf_files:
         file_path = os.path.join(input_directory, file_name)
         pdf_merger.append(file_path)
@@ -215,21 +223,23 @@ def merge_pdfs(input_directory, output_directory):
     date_str = datetime.now().strftime("%Y-%m-%d")  # วันที่ในรูปแบบปี-เดือน-วัน
     output_pdf = os.path.join(output_directory, f"Ex_{date_str}_merged.pdf")
     
-    # สร้างไฟล์ PDF ที่รวม
+    # บันทึกไฟล์ PDF ที่รวม
     with open(output_pdf, "wb") as output_file:
         pdf_merger.write(output_file)
-    print(f"ไฟล์ PDF ถูกรวมเรียบร้อยแล้วที่ {output_pdf}")
+    
+    print(f"\nไฟล์ PDF ถูกรวมเรียบร้อยแล้วที่ {output_pdf}")
     
     return output_pdf
     
 # ตัวอย่างการใช้งาน
 if __name__ == "__main__":
-    input_directory = "[path]"
-    output_directory = "[path]"
+    input_directory = "D:/python/NE/B5"
+    output_directory = "D:/python/NE/A5"
     
     # ลดความละเอียดของรูปภาพเป็น 150 dpi และตั้งค่าคุณภาพ JPEG เป็น 85%
-    results = find_and_compress_pdfs(input_directory, output_directory, dpi=150, image_quality=85)
+    results = find_and_compress_pdfs(input_directory, output_directory, dpi=30, image_quality=5)
     
+    input_directory = "D:/python/NE/A5"
     merge_pdfs(input_directory, output_directory)
     
     print("\nการทำงานเสร็จสิ้น!")
